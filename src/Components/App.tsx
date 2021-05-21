@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { TodoList } from "./TodoList";
 import { AddTodoForm } from "./AddTodoForm";
 import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import "@fontsource/roboto";
 
 import { Todo } from "../types";
 import { ToggleTodo } from "../types";
@@ -11,18 +14,25 @@ import { EditTodo } from "../types";
 import { SetEditText } from "../types";
 import { CancelEdit } from "../types";
 
+const useStyles = makeStyles((theme) => ({
+  title: {
+    marginBottom: theme.spacing(6),
+  },
+}));
+
 const initialTodos = [
-  { text: "task 2", isComplete: false, isCached: false, id: 123 },
-  { text: "task 1", isComplete: true, isCached: false, id: 456 },
+  { content: "task 2", isComplete: false, isCached: false, id: 123 },
+  { content: "task 1", isComplete: true, isCached: false, id: 456 },
 ];
 
 const App = () => {
   const [todos, setTodos] = useState(initialTodos);
+  const classes = useStyles();
 
   // toggleTodo切換isComplete
   const toggleTodo: ToggleTodo = (selectedTodo) => {
     const newTodos = todos.map((todo) => {
-      if (todo.text === selectedTodo.text) {
+      if (todo.content === selectedTodo.content) {
         return {
           ...todo,
           isComplete: !todo.isComplete,
@@ -33,9 +43,14 @@ const App = () => {
     setTodos(newTodos);
   };
 
-  const addTodo: AddTodo = (text) => {
+  const addTodo: AddTodo = (content) => {
     const timestamp: number = Math.floor(Date.now());
-    const newTodo = { text, isComplete: false, isCached: false, id: timestamp };
+    const newTodo = {
+      content,
+      isComplete: false,
+      isCached: false,
+      id: timestamp,
+    };
     setTodos([...todos, newTodo]);
   };
 
@@ -50,7 +65,7 @@ const App = () => {
     // 修改目標todo內容
     todos.forEach((item) => {
       if (item.id === todo.id) {
-        todo.text = text;
+        todo.content = text;
         todo.isCached = false;
       }
     });
@@ -63,22 +78,24 @@ const App = () => {
   };
 
   const deleteTodo: DeleteTodo = (todo: Todo) => {
-    const key: string = todo.text;
-    const spliceIndex: number = todos.findIndex((item) => item.text === key);
+    const key: string = todo.content;
+    const spliceIndex: number = todos.findIndex((item) => item.content === key);
     todos.splice(spliceIndex, 1);
     setTodos([...todos]);
   };
 
   return (
     <Container maxWidth="md">
-      <h1>What is the Plan for Today ?</h1>
+      <Typography variant="h3" className={classes.title}>
+        What is the Plan for Today ?
+      </Typography>
       <TodoList
         todos={todos}
-        editTodo={editTodo}
-        toggleTodo={toggleTodo}
-        deleteTodo={deleteTodo}
-        setEditText={setEditText}
-        cancelEdit={cancelEdit}
+        onEditTodo={editTodo}
+        onToggleTodo={toggleTodo}
+        onDeleteTodo={deleteTodo}
+        onSetEditText={setEditText}
+        onCancelEdit={cancelEdit}
       />
       <AddTodoForm addTodo={addTodo} />
     </Container>
