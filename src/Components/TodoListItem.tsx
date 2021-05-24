@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
+import ListItem from "@material-ui/core/ListItem";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { Todo } from "../types";
 import { ToggleTodo } from "../types";
@@ -12,77 +15,80 @@ import { CancelEdit } from "../types";
 
 interface Props {
   todo: Todo;
-  toggleTodo: ToggleTodo;
-  editTodo: EditTodo;
-  deleteTodo: DeleteTodo;
-  setEditText: SetEditText;
-  cancelEdit: CancelEdit;
+  onToggleTodo: ToggleTodo;
+  onEditTodo: EditTodo;
+  onDeleteTodo: DeleteTodo;
+  onSetEditText: SetEditText;
+  onCancelEdit: CancelEdit;
 }
 
-export const TodoListItem: React.FC<Props> = ({
-  todo,
-  toggleTodo,
-  editTodo,
-  deleteTodo,
-  setEditText,
-  cancelEdit,
-}: Props) => {
-  const [editText, setEdit] = useState(todo.text);
-
-  const todoListItemStyle = {
+const useStyle = makeStyles((theme) => ({
+  button: {
+    marginLeft: theme.spacing(3),
+  },
+  cachedInput: {
+    margin: "0 30px",
+  },
+  ckeckbox: {
+    display: "inline-block",
+  },
+  todoListItem: {
     display: "flex",
     justifyContent: "flex-start",
     width: "100%",
-    marginBottom: "10px",
-  };
+    marginBottom: theme.spacing(1),
+  },
+  todoText: {
+    display: "inline-block",
+    width: "200px",
+  },
+}));
 
-  const cachedInputStyle = {
-    display: todo.isCached ? "inline-block" : "none",
-    height: "20px",
-    transform: "translateY(80%)",
-    margin: "0 30px",
-  };
-
-  const buttonStyle = {
-    margin: "0 20px",
-  };
+export const TodoListItem: React.FC<Props> = ({
+  todo,
+  onToggleTodo,
+  onEditTodo,
+  onDeleteTodo,
+  onSetEditText,
+  onCancelEdit,
+}: Props) => {
+  const [editText, setEdit] = useState(todo.content);
+  const classes = useStyle();
 
   return (
-    <li className="todo-list-item" style={todoListItemStyle}>
-      <label>
-        <Checkbox
-          style={{ display: "inline-block" }}
-          color="primary"
-          checked={todo.isComplete}
-          onClick={() => {
-            toggleTodo(todo);
-          }}
-        />
-        <p
-          style={{
-            textDecoration: todo.isComplete ? "line-through" : undefined,
-            display: "inline-block",
-            width: "200px",
-          }}
-        >
-          {todo.text + " "}
-        </p>
-      </label>
-      <Button
-        variant="outlined"
-        style={buttonStyle}
+    <ListItem className={classes.todoListItem}>
+      <Checkbox
+        className="checkbox"
+        color="primary"
+        checked={todo.isComplete}
         onClick={() => {
-          editTodo(todo);
+          onToggleTodo(todo);
+        }}
+      />
+
+      <Typography
+        className={classes.todoText}
+        style={{ textDecoration: todo.isComplete ? "line-through" : undefined }}
+      >
+        {todo.content + " "}
+      </Typography>
+
+      <Button
+        className={classes.button}
+        style={{ display: todo.isComplete ? "none" : "inline-block" }}
+        variant="outlined"
+        onClick={() => {
+          onEditTodo(todo);
         }}
       >
         修改
       </Button>
       <Button
+        className={classes.button}
         variant="outlined"
         color="secondary"
-        style={buttonStyle}
         onClick={() => {
-          deleteTodo(todo);
+          onDeleteTodo(todo);
         }}
       >
         移除
@@ -90,13 +96,15 @@ export const TodoListItem: React.FC<Props> = ({
 
       <TextField
         id="cachedInput"
-        defaultValue={todo.text}
-        style={cachedInputStyle}
+        className={classes.cachedInput}
+        style={{ display: todo.isCached ? "inline-block" : "none" }}
+        defaultValue={todo.content}
         onChange={(e) => {
           setEdit(e.target.value.trim());
         }}
       />
       <Button
+        className={classes.button}
         variant="outlined"
         color="primary"
         type="submit"
@@ -104,24 +112,22 @@ export const TodoListItem: React.FC<Props> = ({
         onClick={function (e) {
           e.preventDefault();
           if (editText !== "") {
-            setEditText(todo, editText);
+            onSetEditText(todo, editText);
           }
         }}
       >
         確定
       </Button>
       <Button
+        className={classes.button}
         variant="outlined"
-        style={{
-          margin: "0 20px",
-          display: todo.isCached ? "inline-block" : "none",
-        }}
+        style={{ display: todo.isCached ? "inline-block" : "none" }}
         onClick={() => {
-          cancelEdit();
+          onCancelEdit();
         }}
       >
         取消
       </Button>
-    </li>
+    </ListItem>
   );
 };
