@@ -5,7 +5,7 @@ import { Todo } from "../types";
 import { ToggleTodo } from "../types";
 import { EditTodo } from "../types";
 import { DeleteTodo } from "../types";
-import { SetEditText } from "../types";
+import { SaveEdit } from "../types";
 import { CancelEdit } from "../types";
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   toggleTodo: ToggleTodo;
   editTodo: EditTodo;
   deleteTodo: DeleteTodo;
-  setEditText: SetEditText;
+  saveEdit: SaveEdit;
   cancelEdit: CancelEdit;
 }
 
@@ -22,9 +22,10 @@ export const TodoList: React.FC<Props> = ({
   toggleTodo,
   editTodo,
   deleteTodo,
-  setEditText,
+  saveEdit,
   cancelEdit,
 }: Props) => {
+  // FIXME:
   const activeTodos = todos.filter((todo) => todo.isComplete === false);
   const completedTodos = todos.filter((todo) => todo.isComplete === true);
 
@@ -40,7 +41,7 @@ export const TodoList: React.FC<Props> = ({
               toggleTodo={toggleTodo}
               editTodo={editTodo}
               deleteTodo={deleteTodo}
-              setEditText={setEditText}
+              saveEdit={saveEdit}
               cancelEdit={cancelEdit}
             />
           ))}
@@ -56,7 +57,7 @@ export const TodoList: React.FC<Props> = ({
               toggleTodo={toggleTodo}
               editTodo={editTodo}
               deleteTodo={deleteTodo}
-              setEditText={setEditText}
+              saveEdit={saveEdit}
               cancelEdit={cancelEdit}
             />
           ))}
