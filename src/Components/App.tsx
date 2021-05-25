@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { TodoList } from "./TodoList";
 import { AddTodoForm } from "./AddTodoForm";
+
 import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { Todo } from "../types";
 import { ToggleTodo } from "../types";
@@ -11,6 +14,13 @@ import { EditTodo } from "../types";
 import { SaveEdit } from "../types";
 import { CancelEdit } from "../types";
 
+const useStyles = makeStyles(() => ({
+  title: {
+    fontSize: 45,
+    marginBottom: 50,
+  },
+}));
+
 const initialTodos = [
   { text: "task 1", isComplete: false, isEditing: false, id: 123 },
   { text: "task 2", isComplete: true, isEditing: false, id: 456 },
@@ -18,6 +28,7 @@ const initialTodos = [
 
 const App: React.FC = () => {
   const [todos, setTodos] = useState(initialTodos);
+  const classes = useStyles();
 
   const toggleTodo: ToggleTodo = (selectedTodo) => {
     const newTodos = todos.map((todo) => {
@@ -51,7 +62,6 @@ const App: React.FC = () => {
     setTodos(editList);
   };
 
-  // FIXME: use arr.map
   const saveEdit: SaveEdit = (todo, text) => {
     const savedTodos = todos.map((item) => {
       if (item.id === todo.id) {
@@ -78,7 +88,9 @@ const App: React.FC = () => {
 
   return (
     <Container maxWidth="md">
-      <h1>What is the Plan for Today ?</h1>
+      <Typography component="h1" className={classes.title}>
+        What is the Plan for Today ?
+      </Typography>
       <TodoList
         todos={todos}
         editTodo={editTodo}

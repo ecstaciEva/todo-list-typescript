@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
+import ListItem from "@material-ui/core/ListItem";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { Todo } from "../types";
 import { ToggleTodo } from "../types";
@@ -9,7 +12,6 @@ import { DeleteTodo } from "../types";
 import { EditTodo } from "../types";
 import { SaveEdit } from "../types";
 import { CancelEdit } from "../types";
-import { CSSProperties } from "@material-ui/styles";
 
 interface Props {
   todo: Todo;
@@ -33,49 +35,45 @@ export const TodoListItem: React.FC<Props> = ({
     setEdit(e.target.value.trim());
   };
 
-  const todoListItemStyle: CSSProperties = {
-    display: "flex",
-    justifyContent: "flex-start",
-    width: "100%",
-    marginBottom: "10px",
-  };
+  const useStyles = makeStyles(() => ({
+    todoListItem: {
+      marginBottom: 10,
+    },
+    cachedInput: {
+      display: todo.isEditing ? "inline-block" : "none",
+      height: 20,
+      margin: "0 30px",
+    },
+    button: {
+      margin: "0 10px",
+    },
+    hiddenButton: {
+      display: todo.isEditing ? "inline-block" : "none",
+    },
+    todoText: {
+      textDecoration: todo.isComplete ? "line-through" : undefined,
+      display: "inline-block",
+      width: 200,
+      marginRight: 5,
+    },
+  }));
 
-  const cachedInputStyle: CSSProperties = {
-    display: todo.isEditing ? "inline-block" : "none",
-    height: 20,
-    transform: "translateY(80%)",
-    margin: "0 30px",
-  };
-
-  const buttonStyle: CSSProperties = {
-    margin: "0 20px",
-  };
+  const classes = useStyles();
 
   return (
-    <li className="todo-list-item" style={todoListItemStyle}>
-      <label>
-        <Checkbox
-          style={{ display: "inline-block" }}
-          color="primary"
-          checked={todo.isComplete}
-          onClick={function () {
-            toggleTodo(todo);
-          }}
-        />
-        <p
-          style={{
-            textDecoration: todo.isComplete ? "line-through" : undefined,
-            display: "inline-block",
-            width: 200,
-            marginRight: 5,
-          }}
-        >
-          {todo.text}
-        </p>
-      </label>
+    <ListItem className={classes.todoListItem}>
+      <Checkbox
+        style={{ display: "inline-block" }}
+        color="primary"
+        checked={todo.isComplete}
+        onClick={function () {
+          toggleTodo(todo);
+        }}
+      />
+      <Typography className={classes.todoText}>{todo.text}</Typography>
       <Button
         variant="outlined"
-        style={buttonStyle}
+        className={classes.button}
         onClick={() => {
           editTodo(todo);
         }}
@@ -85,7 +83,7 @@ export const TodoListItem: React.FC<Props> = ({
       <Button
         variant="outlined"
         color="secondary"
-        style={buttonStyle}
+        className={classes.button}
         onClick={() => {
           deleteTodo(todo);
         }}
@@ -96,15 +94,14 @@ export const TodoListItem: React.FC<Props> = ({
       <TextField
         id="cachedInput"
         defaultValue={todo.text}
-        style={cachedInputStyle}
+        className={classes.cachedInput}
         onChange={handleChange}
       />
       <Button
         variant="outlined"
         color="primary"
-        type="submit"
-        style={{ display: todo.isEditing ? "inline-block" : "none" }}
-        onClick={function (e) {
+        className={`${classes.button} ${classes.hiddenButton}`}
+        onClick={(e) => {
           e.preventDefault();
           if (editText !== "") {
             saveEdit(todo, editText);
@@ -115,14 +112,11 @@ export const TodoListItem: React.FC<Props> = ({
       </Button>
       <Button
         variant="outlined"
-        style={{
-          margin: "0 20px",
-          display: todo.isEditing ? "inline-block" : "none",
-        }}
+        className={`${classes.button} ${classes.hiddenButton}`}
         onClick={cancelEdit}
       >
         取消
       </Button>
-    </li>
+    </ListItem>
   );
 };
