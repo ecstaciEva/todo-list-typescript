@@ -33,42 +33,47 @@ const App: React.FC = () => {
   };
 
   const addTodo: AddTodo = (text) => {
-    const timestamp: number = Date.now();
-    const newTodo = {
+    const timestamp = Date.now();
+    const newTodo: Todo = {
       text,
       isComplete: false,
       isEditing: false,
       id: timestamp,
     };
-    setTodos(todos.concat([newTodo]));
+    setTodos(todos.concat(newTodo));
   };
 
   const editTodo: EditTodo = (todo) => {
     const editList = todos.map((item) => {
-      item.isEditing = item.id === todo.id ? true : false;
+      item.isEditing = item.id === todo.id;
       return item;
     });
-    setTodos([...editList]);
+    setTodos(editList);
   };
 
+  // FIXME: use arr.map
   const saveEdit: SaveEdit = (todo, text) => {
-    todos.forEach((item) => {
+    const savedTodos = todos.map((item) => {
       if (item.id === todo.id) {
-        todo.text = text;
-        todo.isEditing = false;
+        item.text = text;
+        item.isEditing = false;
       }
+      return item;
     });
-    setTodos([...todos]);
+    setTodos(savedTodos);
   };
 
   const cancelEdit: CancelEdit = () => {
-    todos.forEach((item) => (item.isEditing = false));
-    setTodos([...todos]);
+    const cancelEditTodos = todos.map((item) => {
+      item.isEditing = false;
+      return item;
+    });
+    setTodos(cancelEditTodos);
   };
 
   const deleteTodo: DeleteTodo = (todo: Todo) => {
     const remainedTodos = todos.filter((item) => item.id !== todo.id);
-    setTodos([...remainedTodos]);
+    setTodos(remainedTodos);
   };
 
   return (
