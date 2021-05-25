@@ -43,7 +43,7 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
         variant="outlined"
         color="primary"
         type="submit"
-        onClick={function (e) {
+        onClick={(e) => {
           e.preventDefault();
           if (text.trim() !== "") {
             addTodo(text);
