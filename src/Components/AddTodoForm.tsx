@@ -19,11 +19,15 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
 
   const useStyles = makeStyles(() => ({
     addTodoForm: {
-      display: "flex",
+      width: "100%",
     },
     addTodoInput: {
       border: 0,
       marginBottom: 10,
+      width: "100%",
+    },
+    addTodoButton: {
+      width: "100%",
     },
   }));
 
@@ -33,9 +37,9 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
     <form className={classes.addTodoForm}>
       <InputLabel htmlFor="todo-input">輸入待辦事項</InputLabel>
       <Input
+        id="todo-input"
         className={classes.addTodoInput}
         type="text"
-        id="todo-input"
         value={text}
         onChange={handleChange}
       />
@@ -43,6 +47,7 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
         variant="outlined"
         color="primary"
         type="submit"
+        className={classes.addTodoButton}
         onClick={(e) => {
           e.preventDefault();
           if (text.trim() !== "") {

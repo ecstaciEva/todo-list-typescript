@@ -32,7 +32,7 @@ export const TodoListItem: React.FC<Props> = ({
 }: Props) => {
   const [editText, setEdit] = useState(todo.text);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEdit(e.target.value.trim());
+    setEdit(() => e.target.value);
   };
 
   const useStyles = makeStyles(() => ({
@@ -49,6 +49,9 @@ export const TodoListItem: React.FC<Props> = ({
     },
     hiddenButton: {
       display: todo.isEditing ? "inline-block" : "none",
+    },
+    editButton: {
+      display: todo.isComplete ? "none" : "inline-block",
     },
     todoText: {
       textDecoration: todo.isComplete ? "line-through" : undefined,
@@ -73,7 +76,7 @@ export const TodoListItem: React.FC<Props> = ({
       <Typography className={classes.todoText}>{todo.text}</Typography>
       <Button
         variant="outlined"
-        className={classes.button}
+        className={`${classes.button} ${classes.editButton}`}
         onClick={() => {
           editTodo(todo);
         }}
@@ -92,8 +95,7 @@ export const TodoListItem: React.FC<Props> = ({
       </Button>
 
       <TextField
-        id="cachedInput"
-        defaultValue={todo.text}
+        value={editText}
         className={classes.cachedInput}
         onChange={handleChange}
       />
@@ -103,7 +105,7 @@ export const TodoListItem: React.FC<Props> = ({
         className={`${classes.button} ${classes.hiddenButton}`}
         onClick={(e) => {
           e.preventDefault();
-          if (editText !== "") {
+          if (editText.trim() !== "") {
             saveEdit(todo, editText);
           }
         }}

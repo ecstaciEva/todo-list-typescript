@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useCallback } from "react";
 import { TodoList } from "./TodoList";
 import { AddTodoForm } from "./AddTodoForm";
 
@@ -30,18 +31,22 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState(initialTodos);
   const classes = useStyles();
 
-  const toggleTodo: ToggleTodo = (selectedTodo) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.text === selectedTodo.text) {
-        return {
-          ...todo,
-          isComplete: !todo.isComplete,
-        };
-      }
-      return todo;
-    });
-    setTodos(newTodos);
-  };
+  // Learn how to use useCallback()
+  const toggleTodo: ToggleTodo = useCallback(
+    (todo) => {
+      const newTodos = todos.map((item) => {
+        if (item.id === todo.id) {
+          return {
+            ...item,
+            isComplete: !item.isComplete,
+          };
+        }
+        return item;
+      });
+      setTodos(() => newTodos);
+    },
+    [todos]
+  );
 
   const addTodo: AddTodo = (text) => {
     const timestamp = Date.now();
@@ -51,7 +56,7 @@ const App: React.FC = () => {
       isEditing: false,
       id: timestamp,
     };
-    setTodos(todos.concat(newTodo));
+    setTodos(() => todos.concat(newTodo));
   };
 
   const editTodo: EditTodo = (todo) => {
@@ -59,7 +64,7 @@ const App: React.FC = () => {
       item.isEditing = item.id === todo.id;
       return item;
     });
-    setTodos(editList);
+    setTodos(() => editList);
   };
 
   const saveEdit: SaveEdit = (todo, text) => {
@@ -70,7 +75,7 @@ const App: React.FC = () => {
       }
       return item;
     });
-    setTodos(savedTodos);
+    setTodos(() => savedTodos);
   };
 
   const cancelEdit: CancelEdit = () => {
@@ -78,12 +83,12 @@ const App: React.FC = () => {
       item.isEditing = false;
       return item;
     });
-    setTodos(cancelEditTodos);
+    setTodos(() => cancelEditTodos);
   };
 
   const deleteTodo: DeleteTodo = (todo: Todo) => {
     const remainedTodos = todos.filter((item) => item.id !== todo.id);
-    setTodos(remainedTodos);
+    setTodos(() => remainedTodos);
   };
 
   return (
