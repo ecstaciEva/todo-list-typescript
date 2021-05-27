@@ -22,6 +22,32 @@ interface Props {
   cancelEdit: CancelEdit;
 }
 
+const useStyles = makeStyles({
+  todoListItem: {
+    marginBottom: 10,
+  },
+  cachedInput: (prop: Todo) => ({
+    display: prop.isEditing ? "inline-block" : "none",
+    height: 20,
+    margin: "0 30px",
+  }),
+  button: {
+    margin: "0 10px",
+  },
+  hiddenButton: (prop: Todo) => ({
+    display: prop.isEditing ? "inline-block" : "none",
+  }),
+  editButton: (prop: Todo) => ({
+    display: prop.isComplete ? "none" : "inline-block",
+  }),
+  todoText: (prop: Todo) => ({
+    textDecoration: prop.isComplete ? "line-through" : undefined,
+    display: "inline-block",
+    width: 200,
+    marginRight: 5,
+  }),
+});
+
 export const TodoListItem: React.FC<Props> = ({
   todo,
   toggleTodo,
@@ -35,33 +61,8 @@ export const TodoListItem: React.FC<Props> = ({
     setEdit(() => e.target.value);
   };
 
-  const useStyles = makeStyles(() => ({
-    todoListItem: {
-      marginBottom: 10,
-    },
-    cachedInput: {
-      display: todo.isEditing ? "inline-block" : "none",
-      height: 20,
-      margin: "0 30px",
-    },
-    button: {
-      margin: "0 10px",
-    },
-    hiddenButton: {
-      display: todo.isEditing ? "inline-block" : "none",
-    },
-    editButton: {
-      display: todo.isComplete ? "none" : "inline-block",
-    },
-    todoText: {
-      textDecoration: todo.isComplete ? "line-through" : undefined,
-      display: "inline-block",
-      width: 200,
-      marginRight: 5,
-    },
-  }));
-
-  const classes = useStyles();
+  const styleProps = todo;
+  const classes = useStyles(styleProps);
 
   return (
     <ListItem className={classes.todoListItem}>

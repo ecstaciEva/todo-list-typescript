@@ -22,6 +22,12 @@ interface Props {
   cancelEdit: CancelEdit;
 }
 
+const useStyles = makeStyles({
+  categorySection: {
+    marginBottom: 50,
+  },
+});
+
 export const TodoList: React.FC<Props> = ({
   todos,
   toggleTodo,
@@ -38,12 +44,6 @@ export const TodoList: React.FC<Props> = ({
       todo.isComplete ? completedTodos.push(todo) : activeTodos.push(todo);
     });
   }, [todos]);
-
-  const useStyles = makeStyles(() => ({
-    categorySection: {
-      marginBottom: 50,
-    },
-  }));
 
   const classes = useStyles();
 
