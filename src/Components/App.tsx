@@ -1,83 +1,124 @@
 import React, { useState } from "react";
+import { useCallback } from "react";
 import { TodoList } from "./TodoList";
 import { AddTodoForm } from "./AddTodoForm";
+
 import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
 
 import { Todo } from "../types";
 import { ToggleTodo } from "../types";
 import { AddTodo } from "../types";
 import { DeleteTodo } from "../types";
 import { EditTodo } from "../types";
-import { SetEditText } from "../types";
+import { SaveEdit } from "../types";
 import { CancelEdit } from "../types";
 
+const useStyles = makeStyles(() => ({
+  title: {
+    fontSize: 45,
+    marginBottom: 50,
+  },
+}));
+
 const initialTodos = [
-  { text: "task 2", isComplete: false, isCached: false, id: 123 },
-  { text: "task 1", isComplete: true, isCached: false, id: 456 },
+  { text: "task 1", isComplete: false, isEditing: false, id: 123 },
+  { text: "task 2", isComplete: true, isEditing: false, id: 456 },
 ];
 
-const App = () => {
+const App: React.FC = () => {
   const [todos, setTodos] = useState(initialTodos);
+  const classes = useStyles();
 
-  // toggleTodo切換isComplete
-  const toggleTodo: ToggleTodo = (selectedTodo) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.text === selectedTodo.text) {
-        return {
-          ...todo,
-          isComplete: !todo.isComplete,
-        };
-      }
-      return todo;
-    });
-    setTodos(newTodos);
-  };
+  // FIXME: Learn how to use useCallback()
+  const toggleTodo: ToggleTodo = useCallback(
+    (todo) => {
+      setTodos((todos) => {
+        const newTodos = todos.map((item) => {
+          if (todo.id === item.id) {
+            return {
+              ...item,
+              isComplete: !item.isComplete,
+            };
+          }
+          return item;
+        });
+        return newTodos;
+      });
+    },
+    [todos]
+  );
 
+  // FIXME:
   const addTodo: AddTodo = (text) => {
-    const timestamp: number = Math.floor(Date.now());
-    const newTodo = { text, isComplete: false, isCached: false, id: timestamp };
-    setTodos([...todos, newTodo]);
-  };
-
-  const editTodo: EditTodo = (todo) => {
-    todos.forEach((item) => (item.isCached = false));
-    setTodos([...todos]);
-    const cacheTodo: Todo = todos.filter((item) => todo.id === item.id)[0];
-    cacheTodo.isCached = true;
-  };
-
-  const setEditText: SetEditText = (todo, text) => {
-    // 修改目標todo內容
-    todos.forEach((item) => {
-      if (item.id === todo.id) {
-        todo.text = text;
-        todo.isCached = false;
-      }
+    setTodos((todos) => {
+      const timestamp = Date.now();
+      const newTodo: Todo = {
+        text,
+        isComplete: false,
+        isEditing: false,
+        id: timestamp,
+      };
+      return todos.concat(newTodo);
     });
-    setTodos([...todos]);
   };
 
+  // FIXME:
+  const editTodo: EditTodo = (todo) => {
+    setTodos((todos) => {
+      const editList = todos.map((item) => {
+        item.isEditing = item.id === todo.id;
+        return item;
+      });
+      return editList;
+    });
+  };
+
+  // FIXME:
+  const saveEdit: SaveEdit = (todo, text) => {
+    setTodos((todos) => {
+      const savedTodos = todos.map((item) => {
+        if (item.id === todo.id) {
+          item.text = text;
+          item.isEditing = false;
+        }
+        return item;
+      });
+      return savedTodos;
+    });
+  };
+
+  // FIXME:
   const cancelEdit: CancelEdit = () => {
-    todos.forEach((item) => (item.isCached = false));
-    setTodos([...todos]);
+    setTodos((todos) => {
+      const cancelEditTodos = todos.map((item) => {
+        item.isEditing = false;
+        return item;
+      });
+      return cancelEditTodos;
+    });
   };
 
+  // FIXME:
   const deleteTodo: DeleteTodo = (todo: Todo) => {
-    const key: string = todo.text;
-    const spliceIndex: number = todos.findIndex((item) => item.text === key);
-    todos.splice(spliceIndex, 1);
-    setTodos([...todos]);
+    setTodos((todos) => {
+      const remainedTodos = todos.filter((item) => item.id !== todo.id);
+      return remainedTodos;
+    });
   };
 
   return (
     <Container maxWidth="md">
-      <h1>What is the Plan for Today ?</h1>
+      <Typography component="h1" className={classes.title}>
+        What is the Plan for Today ?
+      </Typography>
       <TodoList
         todos={todos}
         editTodo={editTodo}
         toggleTodo={toggleTodo}
         deleteTodo={deleteTodo}
-        setEditText={setEditText}
+        saveEdit={saveEdit}
         cancelEdit={cancelEdit}
       />
       <AddTodoForm addTodo={addTodo} />
