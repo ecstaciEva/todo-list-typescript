@@ -34,65 +34,73 @@ const App: React.FC = () => {
   // Learn how to use useCallback()
   const toggleTodo: ToggleTodo = useCallback(
     (todo) => {
-      const newTodos = todos.map((item) => {
-        if (item.id === todo.id) {
-          return {
-            ...item,
-            isComplete: !item.isComplete,
-          };
-        }
-        return item;
+      setTodos((todos) => {
+        const newTodos = todos.map((item) => {
+          if (todo.id === item.id) {
+            return {
+              ...item,
+              isComplete: !item.isComplete,
+            };
+          }
+          return item;
+        });
+        return newTodos;
       });
-<<<<<<< HEAD
-      setTodos(newTodos);
-=======
-      setTodos(() => newTodos);
->>>>>>> auto-format
     },
     [todos]
   );
 
   const addTodo: AddTodo = (text) => {
-    const timestamp = Date.now();
-    const newTodo: Todo = {
-      text,
-      isComplete: false,
-      isEditing: false,
-      id: timestamp,
-    };
-    setTodos(() => todos.concat(newTodo));
+    setTodos((todos) => {
+      const timestamp = Date.now();
+      const newTodo: Todo = {
+        text,
+        isComplete: false,
+        isEditing: false,
+        id: timestamp,
+      };
+      return todos.concat(newTodo);
+    });
   };
 
   const editTodo: EditTodo = (todo) => {
-    const editList = todos.map((item) => {
-      item.isEditing = item.id === todo.id;
-      return item;
+    setTodos((todos) => {
+      const editList = todos.map((item) => {
+        item.isEditing = item.id === todo.id;
+        return item;
+      });
+      return editList;
     });
-    setTodos(() => editList);
   };
 
   const saveEdit: SaveEdit = (todo, text) => {
-    const savedTodos = todos.map((item) => {
-      if (item.id === todo.id) {
-        item.text = text;
-        item.isEditing = false;
-      }
-      return item;
+    setTodos((todos) => {
+      const savedTodos = todos.map((item) => {
+        if (item.id === todo.id) {
+          item.text = text;
+          item.isEditing = false;
+        }
+        return item;
+      });
+      return savedTodos;
     });
-    setTodos(() => savedTodos);
   };
 
   const cancelEdit: CancelEdit = () => {
-    const cancelEditTodos = todos.map((item) => {
-      item.isEditing = false;
-      return item;
+    setTodos((todos) => {
+      const cancelEditTodos = todos.map((item) => {
+        item.isEditing = false;
+        return item;
+      });
+      return cancelEditTodos;
     });
-    setTodos(() => cancelEditTodos);
   };
 
   const deleteTodo: DeleteTodo = (todo: Todo) => {
-    const remainedTodos = todos.filter((item) => item.id !== todo.id);
-    setTodos(() => remainedTodos);
+    setTodos((todos) => {
+      const remainedTodos = todos.filter((item) => item.id !== todo.id);
+      return remainedTodos;
+    });
   };
 
   return (
