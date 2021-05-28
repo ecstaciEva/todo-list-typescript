@@ -61,8 +61,7 @@ export const TodoListItem: React.FC<Props> = ({
     setEdit(e.target.value);
   };
 
-  const styleProps = todo;
-  const classes = useStyles(styleProps);
+  const classes = useStyles(todo);
 
   return (
     <ListItem className={classes.todoListItem}>
@@ -70,7 +69,7 @@ export const TodoListItem: React.FC<Props> = ({
         style={{ display: "inline-block" }}
         color="primary"
         checked={todo.isComplete}
-        onClick={function () {
+        onClick={() => {
           toggleTodo(todo);
         }}
       />
