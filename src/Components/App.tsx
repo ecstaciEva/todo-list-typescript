@@ -54,7 +54,7 @@ const App: React.FC = () => {
           }
           return item;
         });
-        return [...newTodos];
+        return newTodos;
       });
     },
     [todos]
