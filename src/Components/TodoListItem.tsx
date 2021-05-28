@@ -58,7 +58,7 @@ export const TodoListItem: React.FC<Props> = ({
 }: Props) => {
   const [editText, setEdit] = useState(todo.text);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEdit(() => e.target.value);
+    setEdit(e.target.value);
   };
 
   const styleProps = todo;
