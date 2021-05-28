@@ -23,8 +23,18 @@ const useStyles = makeStyles(() => ({
 }));
 
 const initialTodos = [
-  { text: "task 1", isComplete: false, isEditing: false, id: 123 },
-  { text: "task 2", isComplete: true, isEditing: false, id: 456 },
+  {
+    text: "React Redux Learning",
+    isComplete: false,
+    isEditing: false,
+    id: 123,
+  },
+  {
+    text: "React Hooks Learning",
+    isComplete: false,
+    isEditing: false,
+    id: 456,
+  },
 ];
 
 const App: React.FC = () => {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -32,7 +33,7 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
   const classes = useStyles();
 
   return (
-    <form className={classes.addTodoForm}>
+    <FormControl className={classes.addTodoForm}>
       <InputLabel htmlFor="todo-input">輸入待辦事項</InputLabel>
       <Input
         id="todo-input"
@@ -44,7 +45,6 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
       <Button
         variant="outlined"
         color="primary"
-        type="submit"
         className={classes.addTodoButton}
         onClick={(e) => {
           e.preventDefault();
@@ -56,6 +56,6 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
       >
         新增
       </Button>
-    </form>
+    </FormControl>
   );
 };

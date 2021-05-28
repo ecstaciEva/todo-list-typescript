@@ -1,10 +1,10 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { TodoListItem } from "./TodoListItem";
 
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
-import { makeStyles } from "@material-ui/core/styles"; // TODO:
+import { makeStyles } from "@material-ui/core/styles";
 
 import { Todo } from "../types";
 import { ToggleTodo } from "../types";
@@ -37,13 +37,12 @@ export const TodoList: React.FC<Props> = ({
   cancelEdit,
 }: Props) => {
   // FIXME: use useMemo()
-  const activeTodos: Todo[] = [];
-  const completedTodos: Todo[] = [];
-  useMemo(() => {
-    todos.filter((todo) => {
-      todo.isComplete ? completedTodos.push(todo) : activeTodos.push(todo);
-    });
-  }, [todos]);
+  const todoCategory = (iscomplete: boolean): Todo[] => {
+    const categoryList = todos.filter((todo) => todo.isComplete === iscomplete);
+    return categoryList;
+  };
+  const activeTodos = todoCategory(false);
+  const completedTodos = todoCategory(true);
 
   const classes = useStyles();
 
