@@ -31,7 +31,7 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState(initialTodos);
   const classes = useStyles();
 
-  // FIXME: Learn how to use useCallback()
+  // Learn how to use useCallback()
   const toggleTodo: ToggleTodo = useCallback(
     (todo) => {
       const newTodos = todos.map((item) => {
@@ -43,12 +43,15 @@ const App: React.FC = () => {
         }
         return item;
       });
+<<<<<<< HEAD
       setTodos(newTodos);
+=======
+      setTodos(() => newTodos);
+>>>>>>> auto-format
     },
     [todos]
   );
 
-  // FIXME:
   const addTodo: AddTodo = (text) => {
     const timestamp = Date.now();
     const newTodo: Todo = {
@@ -60,7 +63,6 @@ const App: React.FC = () => {
     setTodos(() => todos.concat(newTodo));
   };
 
-  // FIXME:
   const editTodo: EditTodo = (todo) => {
     const editList = todos.map((item) => {
       item.isEditing = item.id === todo.id;
@@ -69,7 +71,6 @@ const App: React.FC = () => {
     setTodos(() => editList);
   };
 
-  // FIXME:
   const saveEdit: SaveEdit = (todo, text) => {
     const savedTodos = todos.map((item) => {
       if (item.id === todo.id) {
@@ -81,7 +82,6 @@ const App: React.FC = () => {
     setTodos(() => savedTodos);
   };
 
-  // FIXME:
   const cancelEdit: CancelEdit = () => {
     const cancelEditTodos = todos.map((item) => {
       item.isEditing = false;
@@ -90,7 +90,6 @@ const App: React.FC = () => {
     setTodos(() => cancelEditTodos);
   };
 
-  // FIXME:
   const deleteTodo: DeleteTodo = (todo: Todo) => {
     const remainedTodos = todos.filter((item) => item.id !== todo.id);
     setTodos(() => remainedTodos);

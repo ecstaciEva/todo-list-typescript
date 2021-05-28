@@ -46,9 +46,6 @@ const useStyles = makeStyles({
     width: 200,
     marginRight: 5,
   }),
-  checkbox: {
-    display: "inline-block",
-  },
 });
 
 export const TodoListItem: React.FC<Props> = ({
@@ -61,7 +58,7 @@ export const TodoListItem: React.FC<Props> = ({
 }: Props) => {
   const [editText, setEdit] = useState(todo.text);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEdit(e.target.value);
+    setEdit(() => e.target.value);
   };
 
   const styleProps = todo;
@@ -70,7 +67,7 @@ export const TodoListItem: React.FC<Props> = ({
   return (
     <ListItem className={classes.todoListItem}>
       <Checkbox
-        className={classes.checkbox}
+        style={{ display: "inline-block" }}
         color="primary"
         checked={todo.isComplete}
         onClick={function () {
