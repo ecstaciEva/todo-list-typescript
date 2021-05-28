@@ -31,81 +31,64 @@ const App: React.FC = () => {
   const [todos, setTodos] = useState(initialTodos);
   const classes = useStyles();
 
-  // FIXME: Learn how to use useCallback()
+  // Learn how to use useCallback()
   const toggleTodo: ToggleTodo = useCallback(
     (todo) => {
-      setTodos((todos) => {
-        const newTodos = todos.map((item) => {
-          if (todo.id === item.id) {
-            return {
-              ...item,
-              isComplete: !item.isComplete,
-            };
-          }
-          return item;
-        });
-        return newTodos;
+      const newTodos = todos.map((item) => {
+        if (item.id === todo.id) {
+          return {
+            ...item,
+            isComplete: !item.isComplete,
+          };
+        }
+        return item;
       });
+      setTodos(() => newTodos);
     },
     [todos]
   );
 
-  // FIXME:
   const addTodo: AddTodo = (text) => {
-    setTodos((todos) => {
-      const timestamp = Date.now();
-      const newTodo: Todo = {
-        text,
-        isComplete: false,
-        isEditing: false,
-        id: timestamp,
-      };
-      return todos.concat(newTodo);
-    });
+    const timestamp = Date.now();
+    const newTodo: Todo = {
+      text,
+      isComplete: false,
+      isEditing: false,
+      id: timestamp,
+    };
+    setTodos(() => todos.concat(newTodo));
   };
 
-  // FIXME:
   const editTodo: EditTodo = (todo) => {
-    setTodos((todos) => {
-      const editList = todos.map((item) => {
-        item.isEditing = item.id === todo.id;
-        return item;
-      });
-      return editList;
+    const editList = todos.map((item) => {
+      item.isEditing = item.id === todo.id;
+      return item;
     });
+    setTodos(() => editList);
   };
 
-  // FIXME:
   const saveEdit: SaveEdit = (todo, text) => {
-    setTodos((todos) => {
-      const savedTodos = todos.map((item) => {
-        if (item.id === todo.id) {
-          item.text = text;
-          item.isEditing = false;
-        }
-        return item;
-      });
-      return savedTodos;
-    });
-  };
-
-  // FIXME:
-  const cancelEdit: CancelEdit = () => {
-    setTodos((todos) => {
-      const cancelEditTodos = todos.map((item) => {
+    const savedTodos = todos.map((item) => {
+      if (item.id === todo.id) {
+        item.text = text;
         item.isEditing = false;
-        return item;
-      });
-      return cancelEditTodos;
+      }
+      return item;
     });
+    setTodos(() => savedTodos);
   };
 
-  // FIXME:
-  const deleteTodo: DeleteTodo = (todo: Todo) => {
-    setTodos((todos) => {
-      const remainedTodos = todos.filter((item) => item.id !== todo.id);
-      return remainedTodos;
+  const cancelEdit: CancelEdit = () => {
+    const cancelEditTodos = todos.map((item) => {
+      item.isEditing = false;
+      return item;
     });
+    setTodos(() => cancelEditTodos);
+  };
+
+  const deleteTodo: DeleteTodo = (todo: Todo) => {
+    const remainedTodos = todos.filter((item) => item.id !== todo.id);
+    setTodos(() => remainedTodos);
   };
 
   return (

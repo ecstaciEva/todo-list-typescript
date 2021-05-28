@@ -36,7 +36,7 @@ export const TodoList: React.FC<Props> = ({
   saveEdit,
   cancelEdit,
 }: Props) => {
-  // FIXME: meaningless useMemo
+  // FIXME: use useMemo()
   const activeTodos: Todo[] = [];
   const completedTodos: Todo[] = [];
   useMemo(() => {
