@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { TodoListItem } from "./TodoListItem";
 
 import Box from "@material-ui/core/Box";
@@ -36,13 +36,14 @@ export const TodoList: React.FC<Props> = ({
   saveEdit,
   cancelEdit,
 }: Props) => {
-  // FIXME: use useMemo()
-  const todoCategory = (iscomplete: boolean): Todo[] => {
-    const categoryList = todos.filter((todo) => todo.isComplete === iscomplete);
-    return categoryList;
-  };
-  const activeTodos = todoCategory(false);
-  const completedTodos = todoCategory(true);
+  const activeTodos = useMemo(
+    () => todos.filter((todo) => todo.isComplete === false),
+    [todos]
+  );
+  const completedTodos = useMemo(
+    () => todos.filter((todo) => todo.isComplete === true),
+    [todos]
+  );
 
   const classes = useStyles();
 
