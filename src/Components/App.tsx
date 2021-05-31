@@ -1,19 +1,14 @@
-import React, { useState } from "react";
-import { useCallback } from "react";
+import React from "react";
+import { RootState } from "../store/store";
+// import { useCallback } from "react";
 import { TodoList } from "./TodoList";
 import { AddTodoForm } from "./AddTodoForm";
+
+import { useSelector } from "react-redux";
 
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-
-import { Todo } from "../types";
-import { ToggleTodo } from "../types";
-import { AddTodo } from "../types";
-import { DeleteTodo } from "../types";
-import { EditTodo } from "../types";
-import { SaveEdit } from "../types";
-import { CancelEdit } from "../types";
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -22,26 +17,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const initialTodos = [
-  {
-    text: "React Redux Learning",
-    isComplete: false,
-    isEditing: false,
-    id: 123,
-  },
-  {
-    text: "React Hooks Learning",
-    isComplete: false,
-    isEditing: false,
-    id: 456,
-  },
-];
-
 const App: React.FC = () => {
-  const [todos, setTodos] = useState(initialTodos);
+  const todos = useSelector((state: RootState) => state.todos);
+  // const [todos, setTodos] = useState(initialTodos);
   const classes = useStyles();
 
   // Learn how to use useCallback()
+  /*
   const toggleTodo: ToggleTodo = useCallback(
     (todo) => {
       setTodos((todos) => {
@@ -112,21 +94,15 @@ const App: React.FC = () => {
       return remainedTodos;
     });
   };
+  */
 
   return (
     <Container maxWidth="md">
       <Typography component="h1" className={classes.title}>
         What is the Plan for Today ?
       </Typography>
-      <TodoList
-        todos={todos}
-        editTodo={editTodo}
-        toggleTodo={toggleTodo}
-        deleteTodo={deleteTodo}
-        saveEdit={saveEdit}
-        cancelEdit={cancelEdit}
-      />
-      <AddTodoForm addTodo={addTodo} />
+      <TodoList todos={todos} />
+      <AddTodoForm />
     </Container>
   );
 };

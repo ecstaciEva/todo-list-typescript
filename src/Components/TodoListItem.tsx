@@ -1,4 +1,13 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  deleteTodo,
+  toggleTodo,
+  editTodo,
+  cancelEdit,
+  saveEdit,
+} from "../action/action";
+
 import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
@@ -7,19 +16,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { Todo } from "../types";
-import { ToggleTodo } from "../types";
-import { DeleteTodo } from "../types";
-import { EditTodo } from "../types";
-import { SaveEdit } from "../types";
-import { CancelEdit } from "../types";
 
 interface Props {
   todo: Todo;
-  toggleTodo: ToggleTodo;
-  editTodo: EditTodo;
-  deleteTodo: DeleteTodo;
-  saveEdit: SaveEdit;
-  cancelEdit: CancelEdit;
 }
 
 const useStyles = makeStyles({
@@ -48,14 +47,9 @@ const useStyles = makeStyles({
   }),
 });
 
-export const TodoListItem: React.FC<Props> = ({
-  todo,
-  toggleTodo,
-  editTodo,
-  deleteTodo,
-  saveEdit,
-  cancelEdit,
-}: Props) => {
+export const TodoListItem: React.FC<Props> = ({ todo }) => {
+  const dispatch = useDispatch();
+
   const [editText, setEdit] = useState(todo.text);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEdit(e.target.value);
@@ -70,7 +64,8 @@ export const TodoListItem: React.FC<Props> = ({
         color="primary"
         checked={todo.isComplete}
         onClick={() => {
-          toggleTodo(todo);
+          // console.log("toggleTodo");
+          dispatch(toggleTodo(todo.id));
         }}
       />
       <Typography className={classes.todoText}>{todo.text}</Typography>
@@ -78,7 +73,7 @@ export const TodoListItem: React.FC<Props> = ({
         variant="outlined"
         className={`${classes.button} ${classes.editButton}`}
         onClick={() => {
-          editTodo(todo);
+          dispatch(editTodo(todo.id));
         }}
       >
         修改
@@ -88,7 +83,7 @@ export const TodoListItem: React.FC<Props> = ({
         color="secondary"
         className={classes.button}
         onClick={() => {
-          deleteTodo(todo);
+          dispatch(deleteTodo(todo.id));
         }}
       >
         移除
@@ -106,7 +101,9 @@ export const TodoListItem: React.FC<Props> = ({
         onClick={(e) => {
           e.preventDefault();
           if (editText.trim() !== "") {
-            saveEdit(todo, editText);
+            // console.log("saveEdit, todo, editText");
+
+            dispatch(saveEdit(todo.id, editText));
           }
         }}
       >
@@ -115,7 +112,9 @@ export const TodoListItem: React.FC<Props> = ({
       <Button
         variant="outlined"
         className={`${classes.button} ${classes.hiddenButton}`}
-        onClick={cancelEdit}
+        onClick={() => {
+          dispatch(cancelEdit());
+        }}
       >
         取消
       </Button>

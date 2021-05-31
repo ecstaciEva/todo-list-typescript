@@ -1,15 +1,13 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTodo } from "../action/action";
+
 import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
 import Box from "@material-ui/core/Box";
 import Input from "@material-ui/core/Input";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { AddTodo } from "../types";
-
-interface Props {
-  addTodo: AddTodo;
-}
 const useStyles = makeStyles({
   addTodoForm: {
     width: "100%",
@@ -24,7 +22,8 @@ const useStyles = makeStyles({
   },
 });
 
-export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
+export const AddTodoForm: React.FC = () => {
+  const dispatch = useDispatch();
   const [text, setText] = useState("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -49,7 +48,7 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
         onClick={(e) => {
           e.preventDefault();
           if (text.trim() !== "") {
-            addTodo(text);
+            dispatch(addTodo(text));
             setText("");
           }
         }}

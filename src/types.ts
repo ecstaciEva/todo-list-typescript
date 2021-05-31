@@ -2,7 +2,7 @@ export interface Todo {
   text: string;
   isComplete: boolean;
   isEditing: boolean;
-  id: number;
+  id: string;
 }
 
 export type ToggleTodo = (selectedTodo: Todo) => void;
