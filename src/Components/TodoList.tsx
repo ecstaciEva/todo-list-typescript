@@ -7,19 +7,9 @@ import List from "@material-ui/core/List";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { Todo } from "../types";
-import { ToggleTodo } from "../types";
-import { EditTodo } from "../types";
-import { DeleteTodo } from "../types";
-import { SaveEdit } from "../types";
-import { CancelEdit } from "../types";
 
 interface Props {
   todos: Todo[];
-  toggleTodo: ToggleTodo;
-  editTodo: EditTodo;
-  deleteTodo: DeleteTodo;
-  saveEdit: SaveEdit;
-  cancelEdit: CancelEdit;
 }
 
 const useStyles = makeStyles({
@@ -28,14 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-export const TodoList: React.FC<Props> = ({
-  todos,
-  toggleTodo,
-  editTodo,
-  deleteTodo,
-  saveEdit,
-  cancelEdit,
-}: Props) => {
+export const TodoList: React.FC<Props> = ({ todos }) => {
   const activeTodos = useMemo(
     () => todos.filter((todo) => todo.isComplete === false),
     [todos]
@@ -53,15 +36,7 @@ export const TodoList: React.FC<Props> = ({
         <Typography>進行中</Typography>
         <List className="active-list">
           {activeTodos.map((todo) => (
-            <TodoListItem
-              key={todo.text}
-              todo={todo}
-              toggleTodo={toggleTodo}
-              editTodo={editTodo}
-              deleteTodo={deleteTodo}
-              saveEdit={saveEdit}
-              cancelEdit={cancelEdit}
-            />
+            <TodoListItem todo={todo} key={todo.id} />
           ))}
         </List>
       </Box>
@@ -69,15 +44,7 @@ export const TodoList: React.FC<Props> = ({
         <Typography>已完成</Typography>
         <List className="completed-list`">
           {completedTodos.map((todo) => (
-            <TodoListItem
-              key={todo.text}
-              todo={todo}
-              toggleTodo={toggleTodo}
-              editTodo={editTodo}
-              deleteTodo={deleteTodo}
-              saveEdit={saveEdit}
-              cancelEdit={cancelEdit}
-            />
+            <TodoListItem todo={todo} key={todo.id} />
           ))}
         </List>
       </Box>

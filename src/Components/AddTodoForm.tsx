@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { addTodo, addTodoTextChange } from "../action/action";
+
 import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
 import Box from "@material-ui/core/Box";
 import Input from "@material-ui/core/Input";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { AddTodo } from "../types";
-
-interface Props {
-  addTodo: AddTodo;
-}
 const useStyles = makeStyles({
   addTodoForm: {
     width: "100%",
@@ -24,11 +23,9 @@ const useStyles = makeStyles({
   },
 });
 
-export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
-  const [text, setText] = useState("");
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
-  };
+export const AddTodoForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const addTodoText = useSelector((state: RootState) => state.addTodoText);
 
   const classes = useStyles();
 
@@ -39,8 +36,10 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
         id="todo-input"
         className={classes.addTodoInput}
         type="text"
-        value={text}
-        onChange={handleChange}
+        value={addTodoText}
+        onChange={(e) => {
+          dispatch(addTodoTextChange(e.target.value));
+        }}
       />
       <Button
         variant="outlined"
@@ -48,9 +47,8 @@ export const AddTodoForm: React.FC<Props> = ({ addTodo }) => {
         className={classes.addTodoButton}
         onClick={(e) => {
           e.preventDefault();
-          if (text.trim() !== "") {
-            addTodo(text);
-            setText("");
+          if (addTodoText.trim() !== "") {
+            dispatch(addTodo(addTodoText));
           }
         }}
       >
