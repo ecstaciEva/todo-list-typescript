@@ -36,10 +36,22 @@ export const toggleTodo = createAction(
 
 export const editTodo = createAction(
   "todos/edit",
-  function prepare(id: string) {
+  function prepare(id: string, text: string) {
     return {
       payload: {
         id,
+        text,
+      },
+    };
+  }
+);
+
+export const editTextChange = createAction(
+  "todos/editTextChange",
+  function prepare(text: string) {
+    return {
+      payload: {
+        text,
       },
     };
   }
@@ -47,11 +59,11 @@ export const editTodo = createAction(
 
 export const saveEdit = createAction(
   "todos/saveEdit",
-  function prepare(id: string, editText: string) {
+  function prepare(id: string, editingText: string) {
     return {
       payload: {
         id,
-        editText,
+        editingText,
       },
     };
   }

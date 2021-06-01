@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
 import {
   deleteTodo,
   toggleTodo,
   editTodo,
   cancelEdit,
   saveEdit,
+  editTextChange,
 } from "../action/action";
 
 import Button from "@material-ui/core/Button";
@@ -49,11 +51,14 @@ const useStyles = makeStyles({
 
 export const TodoListItem: React.FC<Props> = ({ todo }) => {
   const dispatch = useDispatch();
+  const editingText = useSelector((state: RootState) => state.editText);
 
-  const [editText, setEdit] = useState(todo.text);
+  // const [editText, setEdit] = useState(todo.text);
+  /*
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEdit(e.target.value);
   };
+  */
 
   const classes = useStyles(todo);
 
@@ -64,7 +69,6 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
         color="primary"
         checked={todo.isComplete}
         onClick={() => {
-          // console.log("toggleTodo");
           dispatch(toggleTodo(todo.id));
         }}
       />
@@ -73,7 +77,7 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
         variant="outlined"
         className={`${classes.button} ${classes.editButton}`}
         onClick={() => {
-          dispatch(editTodo(todo.id));
+          dispatch(editTodo(todo.id, todo.text));
         }}
       >
         修改
@@ -90,9 +94,11 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
       </Button>
 
       <TextField
-        value={editText}
+        value={editingText}
         className={classes.cachedInput}
-        onChange={handleChange}
+        onChange={(e) => {
+          dispatch(editTextChange(e.target.value));
+        }}
       />
       <Button
         variant="outlined"
@@ -100,10 +106,8 @@ export const TodoListItem: React.FC<Props> = ({ todo }) => {
         className={`${classes.button} ${classes.hiddenButton}`}
         onClick={(e) => {
           e.preventDefault();
-          if (editText.trim() !== "") {
-            // console.log("saveEdit, todo, editText");
-
-            dispatch(saveEdit(todo.id, editText));
+          if (editingText.trim() !== "") {
+            dispatch(saveEdit(todo.id, editingText));
           }
         }}
       >

@@ -54,20 +54,36 @@ const todoReducer = createReducer(initState, (builder) => {
         }
         return todo;
       });
+      state.editText = "";
       state.todos = newTodos;
     })
     .addCase(actions.editTodo, (state, action) => {
+      state.editText = action.payload.text;
       state.todos = state.todos.map((todo) => {
         todo.isEditing = todo.id === action.payload.id;
         return todo;
       });
     })
-    // 待確認
+    .addCase(actions.editTextChange, (state, action) => {
+      state.editText = action.payload.text;
+    })
     .addCase(actions.cancelEdit, (state) => {
+      state.editText = "";
       state.todos = state.todos.map((todo) => {
         todo.isEditing = false;
         return todo;
       });
+    })
+    .addCase(actions.saveEdit, (state, action) => {
+      const editedTodos = state.todos.map((todo) => {
+        if (todo.id === action.payload.id) {
+          todo.text = action.payload.editingText;
+          todo.isEditing = false;
+        }
+        return todo;
+      });
+      state.todos = editedTodos;
+      state.editText = "";
     });
 });
 
