@@ -1,6 +1,5 @@
 import React from "react";
 import { RootState } from "../store/store";
-// import { useCallback } from "react";
 import { TodoList } from "./TodoList";
 import { AddTodoForm } from "./AddTodoForm";
 
@@ -19,82 +18,7 @@ const useStyles = makeStyles(() => ({
 
 const App: React.FC = () => {
   const todos = useSelector((state: RootState) => state.todos);
-  // const [todos, setTodos] = useState(initialTodos);
   const classes = useStyles();
-
-  // Learn how to use useCallback()
-  /*
-  const toggleTodo: ToggleTodo = useCallback(
-    (todo) => {
-      setTodos((todos) => {
-        const newTodos = todos.map((item) => {
-          if (todo.id === item.id) {
-            return {
-              ...item,
-              isComplete: !item.isComplete,
-            };
-          }
-          return item;
-        });
-        return newTodos;
-      });
-    },
-    [todos]
-  );
-
-  const addTodo: AddTodo = (text) => {
-    setTodos((todos) => {
-      const timestamp = Date.now();
-      const newTodo: Todo = {
-        text,
-        isComplete: false,
-        isEditing: false,
-        id: timestamp,
-      };
-      return todos.concat(newTodo);
-    });
-  };
-
-  const editTodo: EditTodo = (todo) => {
-    setTodos((todos) => {
-      const editList = todos.map((item) => {
-        item.isEditing = item.id === todo.id;
-        return item;
-      });
-      return editList;
-    });
-  };
-
-  const saveEdit: SaveEdit = (todo, text) => {
-    setTodos((todos) => {
-      const savedTodos = todos.map((item) => {
-        if (item.id === todo.id) {
-          item.text = text;
-          item.isEditing = false;
-        }
-        return item;
-      });
-      return savedTodos;
-    });
-  };
-
-  const cancelEdit: CancelEdit = () => {
-    setTodos((todos) => {
-      const cancelEditTodos = todos.map((item) => {
-        item.isEditing = false;
-        return item;
-      });
-      return cancelEditTodos;
-    });
-  };
-
-  const deleteTodo: DeleteTodo = (todo: Todo) => {
-    setTodos((todos) => {
-      const remainedTodos = todos.filter((item) => item.id !== todo.id);
-      return remainedTodos;
-    });
-  };
-  */
 
   return (
     <Container maxWidth="md">

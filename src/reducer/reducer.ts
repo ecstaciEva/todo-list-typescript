@@ -39,6 +39,10 @@ const todoReducer = createReducer(initState, (builder) => {
         isEditing: false,
       };
       state.todos.push(newTodo);
+      state.addTodoText = "";
+    })
+    .addCase(actions.addTodoTextChange, (state, action) => {
+      state.addTodoText = action.payload.text;
     })
     .addCase(actions.deleteTodo, (state, action) => {
       state.todos = state.todos.filter((todo) => todo.id !== action.payload.id);

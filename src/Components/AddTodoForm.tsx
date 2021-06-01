@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addTodo } from "../action/action";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { addTodo, addTodoTextChange } from "../action/action";
 
 import Button from "@material-ui/core/Button";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -24,10 +25,7 @@ const useStyles = makeStyles({
 
 export const AddTodoForm: React.FC = () => {
   const dispatch = useDispatch();
-  const [text, setText] = useState("");
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
-  };
+  const addTodoText = useSelector((state: RootState) => state.addTodoText);
 
   const classes = useStyles();
 
@@ -38,8 +36,10 @@ export const AddTodoForm: React.FC = () => {
         id="todo-input"
         className={classes.addTodoInput}
         type="text"
-        value={text}
-        onChange={handleChange}
+        value={addTodoText}
+        onChange={(e) => {
+          dispatch(addTodoTextChange(e.target.value));
+        }}
       />
       <Button
         variant="outlined"
@@ -47,9 +47,8 @@ export const AddTodoForm: React.FC = () => {
         className={classes.addTodoButton}
         onClick={(e) => {
           e.preventDefault();
-          if (text.trim() !== "") {
-            dispatch(addTodo(text));
-            setText("");
+          if (addTodoText.trim() !== "") {
+            dispatch(addTodo(addTodoText));
           }
         }}
       >

@@ -12,6 +12,17 @@ export const addTodo = createAction(
   }
 );
 
+export const addTodoTextChange = createAction(
+  "todos/addTodoTextChange",
+  function prepare(text: string) {
+    return {
+      payload: {
+        text,
+      },
+    };
+  }
+);
+
 export const deleteTodo = createAction(
   "todos/delete",
   function prepare(id: string) {

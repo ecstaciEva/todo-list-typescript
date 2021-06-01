@@ -52,14 +52,6 @@ const useStyles = makeStyles({
 export const TodoListItem: React.FC<Props> = ({ todo }) => {
   const dispatch = useDispatch();
   const editingText = useSelector((state: RootState) => state.editText);
-
-  // const [editText, setEdit] = useState(todo.text);
-  /*
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEdit(e.target.value);
-  };
-  */
-
   const classes = useStyles(todo);
 
   return (
