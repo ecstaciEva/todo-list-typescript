@@ -25,8 +25,8 @@ const initState: InitState = {
       id: "456",
     },
   ],
-  addTodoText: "新增事項",
-  editText: "待改內容",
+  addTodoText: "",
+  editText: "",
 };
 
 const todoReducer = createReducer(initState, (builder) => {
